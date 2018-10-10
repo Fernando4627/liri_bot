@@ -1,0 +1,25 @@
+{
+  "name": "faliri",
+  "version": "1.0.0",
+  "description": "liri npm package",
+  "main": "liri.js",
+  "scripts": {
+    "test": "Hello"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fernando4627/liri_bot.git"
+  },
+  "author": "Fernando4627",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fernando4627/liri_bot/issues"
+  },
+  "homepage": "https://github.com/Fernando4627/liri_bot#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "moment": "^2.22.2",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.88.0"
+  }
+}
