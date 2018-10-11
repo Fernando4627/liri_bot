@@ -19,7 +19,7 @@ function runLiRi(command, input) {
             runBandsInTown(input);
             break;
         case 'spotify-this-song':
-            Spotify(input);
+            runSpotify();
             break;
         case 'movie-this':
             runOMDB(input);
@@ -35,16 +35,16 @@ function runLiRi(command, input) {
             return;
     };
 };
-function Spotify(input) {
+function runSpotify(input) {
     spotify.search({ type: 'track', query: input, limit: 1 }, function (err, data) {
         if (err) {
-            return console.log('Error occurred: ' + err);
+            console.log('Error occurred: ' + err);
         } else {
-            data = data.tracks.item[0];
+            song = data.tracks.items[0];
             console.log(
-                '\n\nArtist: ' + data.artists[0].name + '\nSong: ' + data.name
-                + '\nPreview Link: ' + data.preview_url + '\nAlbum: ' +
-                data.album.name+ '\n\n'
+                '\n\nArtist: ' + song.artists[0].name + '\nSong: ' + song.name
+                + '\nPreview Link: ' + song.preview_url + '\nAlbum: ' +
+                song.album.name + '\n\n'
             );
         }
     });
@@ -52,14 +52,33 @@ function Spotify(input) {
 function runBandsInTown(input) {
     var request = require('request');
     request("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp", function (error, response, body) {
-        console.log('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-        console.log('body:', body);
+        if (error) {
+            console.log('error:', error);
+            console.log('statusCode:', response && response.statusCode);
+        }
+        results = JSON.parse(body);
+        if(results,length < 1){
+            console.log('try some other atrist.\n');
+        }else{
+            console.log('\n Time to plan for the upcoming shows and get some days off from work for '+ input + '\n');
+            for (let i = 0; i < 5 && i < results.length; i++){
+                console.log('Venue: ' + results[i].venue.name + '\n'+
+                 'Location: '+ results[i].venue.city + ', ' +
+                  results[i].venue.county);
+                  var partyDate = results[i].datetime.split('T')[0];
+                  partyDate = moment(partyDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
+                  if(partyDate){
+                      console.log('Date: ' + partyDate + '\n');
+                  }else{
+                      console.log('Date: Call someone else to find out..... TBA')
+                  }
+            }
+        }
     });
 };
 function runOMDB(input) {
     var request2 = require('request');
-    request2('http://www.omdbapi.com/?apikey=[trilogy]&' + input, function (error, response, body) {
+    request2('http://www.omdbapi.com/?apikey=trilogy&t=' + input, function (error, response, body) {
         console.log('error:', error);
         console.log('statusCode:', response && response.statusCode);
         console.log('body:', body);
