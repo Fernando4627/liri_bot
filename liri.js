@@ -6,12 +6,7 @@ var fs = require('fs');
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
-var argArray = [];
-var input;
-for (var i = 3; i < argArray.length; i++) {
-    input = argArray[i];
-}
-
+var input = process.argv.slice(3).join(' ');
 runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
@@ -19,7 +14,7 @@ function runLiRi(command, input) {
             runBandsInTown(input);
             break;
         case 'spotify-this-song':
-            runSpotify();
+            runSpotify(input);
             break;
         case 'movie-this':
             runOMDB(input);
@@ -57,21 +52,21 @@ function runBandsInTown(input) {
             console.log('statusCode:', response && response.statusCode);
         }
         results = JSON.parse(body);
-        if(results,length < 1){
+        if (results.length < 1) {
             console.log('try some other atrist.\n');
-        }else{
-            console.log('\n Time to plan for the upcoming shows and get some days off from work for '+ input + '\n');
-            for (let i = 0; i < 5 && i < results.length; i++){
-                console.log('Venue: ' + results[i].venue.name + '\n'+
-                 'Location: '+ results[i].venue.city + ', ' +
-                  results[i].venue.county);
-                  var partyDate = results[i].datetime.split('T')[0];
-                  partyDate = moment(partyDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
-                  if(partyDate){
-                      console.log('Date: ' + partyDate + '\n');
-                  }else{
-                      console.log('Date: Call someone else to find out..... TBA')
-                  }
+        } else {
+            console.log('\n Time to plan for the upcoming shows and get some days off from work for ' + input + '\n');
+            for (let i = 0; i < 5 && i < results.length; i++) {
+                console.log('Venue: ' + results[i].venue.name + '\n' +
+                    'Location: ' + results[i].venue.city + ', ' +
+                    results[i].venue.county);
+                var partyDate = results[i].datetime.split('T')[0];
+                partyDate = moment(partyDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
+                if (partyDate) {
+                    console.log('Date: ' + partyDate + '\n');
+                } else {
+                    console.log('Date: Call someone else to find out..... TBA')
+                }
             }
         }
     });
@@ -79,9 +74,20 @@ function runBandsInTown(input) {
 function runOMDB(input) {
     var request2 = require('request');
     request2('http://www.omdbapi.com/?apikey=trilogy&t=' + input, function (error, response, body) {
-        console.log('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-        console.log('body:', body);
+        if (error) {
+            console.log('error:', error);
+            console.log('statusCode:', response && response.statusCode);
+        } else {
+            movie = JSON.parse(body);
+            console.log("\n\nTitle: " + movie.Title);
+            console.log("Year: " + movie.Year);
+            console.log("IMDB Rating: " + movie.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + movie.Ratings[1].Value);
+            console.log("Country: " + movie.Country);
+            console.log("Language: " + movie.Language);
+            console.log("Plot: " + movie.Plot);
+            console.log("Actors: " + movie.Actors);
+        }
     });
 };
 function runRandom(command, input) {
@@ -92,8 +98,7 @@ function runRandom(command, input) {
         }
         data = data.split('"');
         var dataArr = data;
-
-        command = dataArr[0];
+        command = dataArr[0].split(',')[0];
         input = dataArr[1];
         runLiRi(command, input);
     });
