@@ -9,9 +9,9 @@ var command = process.argv[2];
 var argArray = [];
 var input;
 for (var i = 3; i < argArray.length; i++) {
-    input = argArray[i]
+    input = argArray[i];
 }
-console.log(input);
+
 runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
@@ -22,7 +22,7 @@ function runLiRi(command, input) {
             Spotify(input);
             break;
         case 'movie-this':
-            runOMBD(input);
+            runOMDB(input);
             break;
         case 'do-what-it-says':
             runRandom(command, input);
@@ -57,7 +57,7 @@ function runBandsInTown(input) {
         console.log('body:', body);
     });
 };
-function runOMBD(input) {
+function runOMDB(input) {
     var request2 = require('request');
     request2('http://www.omdbapi.com/?apikey=[trilogy]&' + input, function (error, response, body) {
         console.log('error:', error);
@@ -71,8 +71,8 @@ function runRandom(command, input) {
         if (error) {
             console.log(error)
         }
-        data = data.split('"')
-        var dataArr = data.split(",");
+        data = data.split('"');
+        var dataArr = data;
 
         command = dataArr[0];
         input = dataArr[1];
