@@ -11,7 +11,7 @@ runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
         case 'concert-this':
-        input === undefined ? runBandsInTown('twentiy one pilots'):
+        input === undefined ? runBandsInTown('twenty one pilots'):
             runBandsInTown(input);
             break;
         case 'spotify-this-song':
@@ -30,7 +30,6 @@ function runLiRi(command, input) {
             break;
         default:
             console.log('If your having trouble type in help')
-            return;
     };
 };
 function runSpotify(input) {
