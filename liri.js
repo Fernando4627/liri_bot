@@ -1,72 +1,82 @@
 'Liri Bot'
 require("dotenv").config();
-var keys = '';
-var spotify = new Spotify(keys.spotify);
-var command = process.argv[2].toLowerCase();
+var keys = require('./keys');
+var moment = require('moment');
 var fs = require('fs');
-for (var i = 3; i < argArray.length; i++ ){
-    var input = argArray[i]
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
+var command = process.argv[2];
+var argArray = [];
+var input;
+for (var i = 3; i < argArray.length; i++) {
+    input = argArray[i]
 }
+console.log(input);
+runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
         case 'concert-this':
-            runBandsInTown();
+            runBandsInTown(input);
             break;
         case 'spotify-this-song':
-            Spotify();
+            Spotify(input);
             break;
         case 'movie-this':
-            runOMBD();
+            runOMBD(input);
             break;
         case 'do-what-it-says':
-            runRandom();
+            runRandom(command, input);
             break;
         case 'help':
             help();
             break;
         default:
+            console.log('If your having trouble type in help')
             return;
     };
 };
 function Spotify(input) {
-    spotify.search({ type: 'track', query: 'All the Small Things' }, function (err, data) {
+    spotify.search({ type: 'track', query: input, limit: 1 }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
+        } else {
+            data = data.tracks.item[0];
+            console.log(
+                '\n\nArtist: ' + data.artists[0].name + '\nSong: ' + data.name
+                + '\nPreview Link: ' + data.preview_url + '\nAlbum: ' +
+                data.album.name+ '\n\n'
+            );
         }
-
-        console.log(data);
     });
 };
 function runBandsInTown(input) {
     var request = require('request');
-    request("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp", function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
+    request("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp", function (error, response, body) {
+        console.log('error:', error);
+        console.log('statusCode:', response && response.statusCode);
+        console.log('body:', body);
     });
 };
 function runOMBD(input) {
     var request2 = require('request');
-    request('http://www.omdbapi.com/?apikey=[trilogy]&' + movie, function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
+    request2('http://www.omdbapi.com/?apikey=[trilogy]&' + input, function (error, response, body) {
+        console.log('error:', error);
+        console.log('statusCode:', response && response.statusCode);
+        console.log('body:', body);
     });
 };
-function runRandom() {
+function runRandom(command, input) {
 
     fs.readFile("random.txt", "utf8", function (error, data) {
         if (error) {
             console.log(error)
         }
-
-        console.log(data);
-
+        data = data.split('"')
         var dataArr = data.split(",");
 
         command = dataArr[0];
         input = dataArr[1];
-        runLiRi(command,input);
+        runLiRi(command, input);
     });
 };
 function help() {
