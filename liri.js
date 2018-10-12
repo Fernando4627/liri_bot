@@ -6,21 +6,23 @@ var fs = require('fs');
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
-var input = process.argv.slice(3).join(' ');
+if (!process.argv[3] === undefined) {
+    var input = process.argv.slice(3).join(' ');
+}
 runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
         case 'concert-this':
-        input === undefined ? runBandsInTown('twenty one pilots'):
-            runBandsInTown(input);
+            input === undefined ? runBandsInTown('twenty one pilots') :
+                runBandsInTown(input);
             break;
         case 'spotify-this-song':
-        input === undefined ? runSpotify("can't hold us"):
-            runSpotify(input);
+            input === undefined ? runSpotify("can't hold us") :
+                runSpotify(input);
             break;
         case 'movie-this':
-        input === undefined ? runOMDB('deadpool'):
-            runOMDB(input);
+            input === undefined ? runOMDB('deadpool') :
+                runOMDB(input);
             break;
         case 'do-what-it-says':
             runRandom(command, input);
@@ -61,7 +63,7 @@ function runBandsInTown(input) {
             for (let i = 0; i < 5 && i < results.length; i++) {
                 console.log('Venue: ' + results[i].venue.name + '\n' +
                     'Location: ' + results[i].venue.city + ', ' +
-                    results[i].venue.county);
+                    results[i].venue.country);
                 var partyDate = results[i].datetime.split('T')[0];
                 partyDate = moment(partyDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
                 if (partyDate) {
