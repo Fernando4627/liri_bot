@@ -9,7 +9,6 @@ var command = process.argv[2];
 if (!process.argv[3] === undefined) {
     var input = process.argv.slice(3).join(' ');
 }
-help();
 runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
@@ -30,6 +29,9 @@ function runLiRi(command, input) {
             break;
         case 'help':
             help();
+            break;
+        case undefined:
+        help();
             break;
         default:
             console.log('If your having trouble type in help')
