@@ -9,6 +9,7 @@ var command = process.argv[2];
 if (!process.argv[3] === undefined) {
     var input = process.argv.slice(3).join(' ');
 }
+help();
 runLiRi(command, input);
 function runLiRi(command, input) {
     switch (command) {
