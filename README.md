@@ -6,7 +6,8 @@ takes in parameters and gives you back data.
 
 LIRI uses Spotify, OMDB, and Bands In Town API to give 
 the consumer information about a song, a band, or a movie 
-using the following commands.
+using the following commands. Also feel free to try our 
+command using do-what-it-says and see your result.
 
 spotify-this-song
 concert-this
